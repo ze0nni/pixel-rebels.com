@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru-ru">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="generator" content="Hugo 0.92.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="Pixel rebels">
+<title>Инструментарий для SOD - Pixel rebels</title>
+</head>
+<body>
+
+<header>
+  <div class="container clearfix">
+    <a class="path" href="https://pixel-rebels.com/">[Pixel rebels]</a>
+    
+  </div>
+</header>
+
+<div class="container">
+
+
+<main role="main" class="article">
+  
+<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="meta">
+
+    <span class="val"><time itemprop="datePublished" datetime="2022-02-04">4
+
+
+Февраля
+
+
+
+
+
+
+
+
+
+
+2022</time></span>
+
+
+
+  </div>
+  <h1 class="headline" itemprop="headline">Инструментарий для SOD</h1>
+  <section class="body" itemprop="articleBody">
+    <p>Немного о том, как я делаю игру и какими инструментами пользуюсь.</p>
+<h1 id="карты-мыслей">Карты мыслей</h1>
+<p>Начну не с технических инструментов, а с ментальных. Как придумывать игру?
+Я пользуюсь для этого сервисом <a href="https://www.mindmeister.com/">mindmeister.com</a>.
+Это отличный инструмент для структурирования своих мыслей.</p>
+<p>Когда мне приходит какая-то идея, я добавляю ее в карту. Скорее всего не все идей
+получится реализовать, а какие-то придется пересмотреть, но это здорово помогает
+и мотивирует. Глядя на свою карту (ниже) я больше верю что доведу игру до конца.</p>
+<p>
+<figure style="text-align:center">
+    <img src="mindmap.png" onclick='img_36db6154ea158713af5339e659b58074.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Mindmap персонажей</figcaption>
+</figure>
+
+<dialog id="img_36db6154ea158713af5339e659b58074" onclick='img_36db6154ea158713af5339e659b58074.close()'>
+    <img src="mindmap.png" style="width:100%;height:100%">
+</dialog></p>
+<h1 id="castledb">CastleDB</h1>
+<p>Пожалуй самая интересная часть это конфиги игры. Кто-то хранит данные в экселе или
+гугл таблицах, другие &ndash;  в xml\json\ini. Недостатки таких методов очевидны &ndash;
+целостность данных можно проверить только в рантайме. Геймдизайнер запросто может
+ошибиться с именем индетефикатора или он будет удален и в лучшем случае игра упадет
+при загрузке конфигов, а в худшем во время игры.</p>
+<p>Юнити позволяет хранить такие вещи в ScriptableObject это полностью решает проблемы
+выше. Но лично на мой вкус не очень удобно настраивать связи между множеством
+объектов, приятнее когда все в одном месте и перед гразами.</p>
+<p>Третий вариант &ndash; использование БД или разработка своего инструментария. Это отличный
+вариант, но подходит скорее не для инди игры, а для энтерпрайза.</p>
+<p>Мой ответ &ndash; <a href="http://castledb.org/">CastleDB</a> он решает большинство проблем выше и еще
+кое что, но об этом ниже. CastleDB позволяет создавать таблицы сущностей и создавать связи
+между ними. Данные храняется в простом json. И легко импортируются. Если у меня когда-то
+появится геймдизайнер, уверен он будет доволен.</p>
+<p>
+<figure style="text-align:center">
+    <img src="castledb.png" onclick='img_c1532bd03caf59954e425f7eb620f220.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Интерфейс CastleDB</figcaption>
+</figure>
+
+<dialog id="img_c1532bd03caf59954e425f7eb620f220" onclick='img_c1532bd03caf59954e425f7eb620f220.close()'>
+    <img src="castledb.png" style="width:100%;height:100%">
+</dialog></p>
+<h1 id="defold">Defold</h1>
+<p>В качестве игрового движка я использую <a href="https://defold.com/">Defold</a>. Почему? Просто интересно
+попробоваться что-то новое и отдохнуть от юнити. В качестве языка программирования в дефод
+используется <a href="https://www.lua.org/">lua</a>.</p>
+<p>Хочу только сказать что на дефолде приятно писать, я как будто отдыхаю =)</p>
+<h1 id="haxe">Haxe</h1>
+<p><a href="https://haxe.org/">Haxe</a> это кросплатформенный язык программирования, который позволяет
+генерировать код под множество других языков. Таким образом можно генерировать один код,
+например, на C# и NodeJS.</p>
+<p>Haxe является типизированным языком с такими приятными вещами как ADT. В то же время
+lua это динамический язык, а я жуть как боюсь таких языков. Haxe позволяет генерировать
+код для lua. Таким образом я пишу на defold на типизированном языке.</p>
+<p>Второй плюс &ndash; это тесная интеграция с CastleDB. Haxe позволяет вытаскивать структуру таблиц
+из json castleDb и генерировать на их основе классы. Таким образом я еще получаю и статически
+типизированный json.</p>
+<p>
+<figure style="text-align:center">
+    <img src="haxe-logo.png" onclick='img_e79cb68a979a8c27ae1d16a05719e4ea.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">defold</figcaption>
+</figure>
+
+<dialog id="img_e79cb68a979a8c27ae1d16a05719e4ea" onclick='img_e79cb68a979a8c27ae1d16a05719e4ea.close()'>
+    <img src="haxe-logo.png" style="width:100%;height:100%">
+</dialog></p>
+<h1 id="другое">Другое</h1>
+<p>Есть еще несколько инструментов, про которые я не могу ничего рассказать:</p>
+<ul>
+<li><a href="https://www.gimp.org/">Gimp</a></li>
+<li><a href="https://store.steampowered.com/app/431730/Aseprite/">Aseprite</a></li>
+</ul>
+  </section>
+</article>
+
+</main>
+
+</div>
+
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2022 Pixel rebels - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
+

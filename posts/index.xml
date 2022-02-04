@@ -6,15 +6,24 @@
     <description>Recent content in Posts on Pixel rebels</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru-ru</language>
-    <lastBuildDate>Thu, 03 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://pixel-rebels.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://pixel-rebels.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Инструментарий для SOD</title>
+      <link>https://pixel-rebels.com/posts/2022-02-04_instruments/</link>
+      <pubDate>Fri, 04 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://pixel-rebels.com/posts/2022-02-04_instruments/</guid>
+      <description>&lt;p&gt;Немного о том, как я делаю игру и какими инструментами пользуюсь.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>О проекте Soul of dungeon</title>
       <link>https://pixel-rebels.com/posts/2022-02-03_present_sod/</link>
       <pubDate>Thu, 03 Feb 2022 00:00:00 +0000</pubDate>
       
       <guid>https://pixel-rebels.com/posts/2022-02-03_present_sod/</guid>
-      <description>Меня всегда привлекал жанр рогаликов. В одной из статей на хабре их сравнили с одноруким бандитом. Ты раз за разом проходишь одно и то же подземелье в надежде что в этот раз рандом улыбнется тебе.
-Накопив мотивации, я создал новый проект и начал творить. У меня есть небольшой опыт в НРИ, оттуда я решил перетащить механику данжен мастера, и сделать игру более похожей на партию в DnD. Партия приключенцев идет вперед и перед ними возникает случайное событие, это может быть бой с противником или ловушка или запертая дверь с сокровищами или странствующий торговец (так же в разработке загадочник).</description>
+      <description>&lt;p&gt;Меня всегда привлекал жанр рогаликов. В одной из статей на хабре их сравнили с одноруким бандитом.
+Ты раз за разом проходишь одно и то же подземелье в надежде что в этот раз рандом улыбнется тебе.&lt;/p&gt;</description>
     </item>
     
   </channel>
