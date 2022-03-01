@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru-ru">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="generator" content="Hugo 0.92.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="Pixel rebels">
+<title>Внешние библиотеки в haxe - Pixel rebels</title>
+</head>
+<body>
+
+<header>
+  <div class="container clearfix">
+    <a class="path" href="https://pixel-rebels.com/">[Pixel rebels]</a>
+    
+  </div>
+</header>
+
+<div class="container">
+
+
+<main role="main" class="article">
+  
+<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="meta">
+
+    <span class="val"><time itemprop="datePublished" datetime="2022-03-01">1
+
+
+
+Марта
+
+
+
+
+
+
+
+
+
+2022</time></span>
+
+
+
+  </div>
+  <h1 class="headline" itemprop="headline">Внешние библиотеки в haxe</h1>
+  <section class="body" itemprop="articleBody">
+    <p>Разрабатывая игру для дефолда на haxe в какой-то момент потребуется
+использовать внешние библиотеки дефолда. Очевидно что в хаксе нет api
+для работы с этими библиотеками. Как же получить доступ к дополнительным
+возможностям?</p>
+<h1 id="untyped">Untyped</h1>
+<p>Для начала в хаксе есть ключевое слово <code>untyped</code>. С его помощью можно писать
+код, который игнорирует систему типов. Для примера возьмем такую библиотеку на луа:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lua" data-lang="lua"><span style="color:#66d9ef">local</span> M <span style="color:#f92672">=</span> {
+
+}
+
+M.sum <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(a, b) <span style="color:#66d9ef">return</span> a <span style="color:#f92672">+</span> b <span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">return</span> M
+</code></pre></div><p>Что бы вызвать такой модуль из хакса можно написать следующий код:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-main.hx" data-lang="main.hx"><span style="color:#66d9ef">var</span> module <span style="color:#f92672">=</span> <span style="color:#66d9ef">untyped</span> require(<span style="color:#e6db74">&#34;module&#34;</span>);
+<span style="color:#66d9ef">var</span> c <span style="color:#f92672">=</span> <span style="color:#66d9ef">untyped</span> module.sum(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>);
+trace(c);
+</code></pre></div><p>Этот код успешно скомпилируется и отработает, но тут не будет ни какой проверки типов
+потому не рекомендую им пользоваться.</p>
+<h1 id="extern">Extern</h1>
+<p>Правильный способ &ndash; написать extern-класс для вашей библиотеки:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-main.hx" data-lang="main.hx"><span style="color:#a6e22e">@:luaRequire(</span><span style="color:#e6db74">&#34;main&#34;</span><span style="color:#a6e22e">)</span>
+<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">class</span> Module {
+	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">sum</span>(a: Int, b: Int): Int; 
+}
+</code></pre></div><p>Как вы заметили, я использовал ключевое слово <code>extern</code> и не указываю тело функции &ndash; это сигнал компилятору, что функция определена извне. Так же указана аннотация <code>luaRequire</code> эта часть специфичная для lua, она указывает из какого файла сделать require.</p>
+<p>В случае lua, класс может не требовать require а сразу быть доступным извне. Например это касается
+стандартных классов os\sys\io\math... В случае os можно создать такой класс:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-main.hx" data-lang="main.hx"><span style="color:#a6e22e">@:native(</span><span style="color:#e6db74">&#34;os&#34;</span><span style="color:#a6e22e">)</span>
+<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">class</span> Os {
+	<span style="color:#a6e22e">@:native(</span><span style="color:#e6db74">&#34;new&#34;</span><span style="color:#a6e22e">)</span>
+	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">new_</span>(code: Int): Void
+}
+</code></pre></div><p>Поскольку модуль называется с маленькой буквы, а хакс требует называть классы с прописной, я явно
+указываю имя класса как <code>os</code> (можно еще указать <code>_G.os</code>). Так же я указал <code>native</code> для функции new.
+Так нужно в случае, когда функция называется так же как ключевое слово haxe.</p>
+<p>В lua возможна ситауция, когда функция может вызываться с разными типами и даже колличеством
+аргументов, говоря другим языком &ndash; функция имеет перезагрузки. Для такого случая в хакс так же
+предусмотрена аннотация:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-main.hx" data-lang="main.hx"><span style="color:#a6e22e">@:native(</span><span style="color:#e6db74">&#34;vmath&#34;</span><span style="color:#a6e22e">)</span>
+<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">class</span> VMath {
+	<span style="color:#a6e22e">@:overload(</span><span style="color:#66d9ef">function</span>(a: Vector, b: Vector):Vector {}<span style="color:#a6e22e">)</span>
+	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">sum</span>(a: Int, b: Int): Int;
+} 
+</code></pre></div><p>Тут описана функция sum, которая умеет складывать как вектора так и числа.</p>
+<p>Еще одна фишка lua &ndash; возврат нескольких значений из функции. В хаксе для этого предусмотрена аннотация <code>multiReturn</code>. Вот пример из документации:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-main.hx" data-lang="main.hx"><span style="color:#a6e22e">@:native(</span><span style="color:#e6db74">&#34;string&#34;</span><span style="color:#a6e22e">)</span>
+<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">class</span> NativeString {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">find</span>(str : String, target : String): StringFind;
+}
+
+<span style="color:#a6e22e">@:multiReturn</span> <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">class</span> StringFind {
+    <span style="color:#66d9ef">var</span> begin : Int;
+    <span style="color:#66d9ef">var</span> end : Int;
+}
+</code></pre></div><p>Таким образом хакс позволяет быстро и легко подключать внещние библиотеки и использовать всю мощь типизации.</p>
+  </section>
+</article>
+
+</main>
+
+</div>
+
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2022 Pixel rebels - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
+
