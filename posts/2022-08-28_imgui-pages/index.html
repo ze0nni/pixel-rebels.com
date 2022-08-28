@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru-ru">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="generator" content="Hugo 0.92.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="Pixel rebels">
+<title>Переключение вкладок в imgui - Pixel rebels</title>
+</head>
+<body>
+
+<header>
+  <div class="container clearfix">
+    <a class="path" href="https://pixel-rebels.com/">[Pixel rebels]</a>
+    
+  </div>
+</header>
+
+<div class="container">
+
+
+<main role="main" class="article">
+  
+<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="meta">
+
+    <span class="val"><time itemprop="datePublished" datetime="2022-08-28">28
+
+
+
+
+
+
+
+
+Августа
+
+
+
+
+2022</time></span>
+
+
+
+  </div>
+  <h1 class="headline" itemprop="headline">Переключение вкладок в imgui</h1>
+  <section class="body" itemprop="articleBody">
+    <p>При создании сложных интерфейсов в инспекторе Unity иногда возникает
+необходиость создания чего-то вроде вкладок. Вкладки имеют одинаковую структуру,
+но разное содержание.</p>
+<p>Для пример рассмотрим следующий класс:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">using</span> System.Linq;
+<span style="color:#66d9ef">using</span> UnityEditor;
+<span style="color:#66d9ef">using</span> UnityEngine;
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span>
+{
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">string</span> Name;
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> Age;
+}
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ListEditor</span> : EditorWindow
+{
+<span style="color:#a6e22e">    [MenuItem(&#34;Test/ListEditor&#34;)]</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Display()
+    {
+        <span style="color:#66d9ef">var</span> window = EditorWindow.CreateWindow&lt;ListEditor&gt;();
+        window.Show();
+    }
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#ae81ff">_</span>selected;
+    <span style="color:#66d9ef">public</span> User[] <span style="color:#ae81ff">_</span>users = <span style="color:#66d9ef">new</span>[] { <span style="color:#66d9ef">new</span> User(), <span style="color:#66d9ef">new</span> User(), <span style="color:#66d9ef">new</span> User() };
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> OnGUI()
+    {
+        <span style="color:#66d9ef">var</span> user = <span style="color:#ae81ff">_</span>users[<span style="color:#ae81ff">_</span>selected];
+
+        user.Name = EditorGUILayout.TextField(user.Name);
+        user.Age = EditorGUILayout.IntField(user.Age);
+
+        <span style="color:#ae81ff">_</span>selected = GUILayout.Toolbar(<span style="color:#ae81ff">_</span>selected, <span style="color:#ae81ff">_</span>users.Select(x =&gt; x.Name).ToArray());
+    }
+}
+</code></pre></div><p>Если поставить в таком окне фокус на текстовое поле и переключать вкладки
+то текстовое поле будет оставаться в фокусе, и будет показывать неправильное
+значение</p>
+<p>
+<figure style="text-align:center">
+    <img src="problem.gif" onclick='img_09e6a96e518d52f16cf397e4abaa9286.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Проблема</figcaption>
+</figure>
+
+<dialog id="img_09e6a96e518d52f16cf397e4abaa9286" onclick='img_09e6a96e518d52f16cf397e4abaa9286.close()'>
+    <img src="problem.gif" style="width:100%;height:100%">
+</dialog></p>
+<p>Это происходит из&ndash;за того, что Unity использует индексы элементов и с ее
+точки зрения ни какого переключения вкладок не произошло.</p>
+<h1 id="решение">Решение</h1>
+<p>Для решения нужно &ldquo;сообщить&rdquo; юнити о том что содержимое изменилось.
+Для этого предназначена функция <code>GUIUtility.GetControlID</code> с помощью нее
+можно обозначить уникальность страницы. Для этого нужно передать уникальное число.
+Для этого подойдет хешкод объекта user.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> OnGUI()
+{
+        <span style="color:#66d9ef">var</span> user = <span style="color:#ae81ff">_</span>users[<span style="color:#ae81ff">_</span>selected];
+
+<span style="display:block;width:100%;background-color:#3c3d38">        <span style="color:#66d9ef">var</span> id = GUIUtility.GetControlID(user.GetHashCode(), FocusType.Passive);
+</span>
+        user.Name = EditorGUILayout.TextField(user.Name);
+        user.Age = EditorGUILayout.IntField(user.Age);
+
+        <span style="color:#ae81ff">_</span>selected = GUILayout.Toolbar(<span style="color:#ae81ff">_</span>selected, <span style="color:#ae81ff">_</span>users.Select(x =&gt; x.Name).ToArray());
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>
+<figure style="text-align:center">
+    <img src="solution.gif" onclick='img_7f131536b0837c4cb556cfb86b285fdf.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Решение</figcaption>
+</figure>
+
+<dialog id="img_7f131536b0837c4cb556cfb86b285fdf" onclick='img_7f131536b0837c4cb556cfb86b285fdf.close()'>
+    <img src="solution.gif" style="width:100%;height:100%">
+</dialog></p>
+  </section>
+</article>
+
+</main>
+
+</div>
+
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2022 Pixel rebels - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
+

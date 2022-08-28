@@ -6,7 +6,18 @@
     <description>Recent content in Posts on Pixel rebels</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru-ru</language>
-    <lastBuildDate>Tue, 01 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://pixel-rebels.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://pixel-rebels.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Переключение вкладок в imgui</title>
+      <link>https://pixel-rebels.com/posts/2022-08-28_imgui-pages/</link>
+      <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://pixel-rebels.com/posts/2022-08-28_imgui-pages/</guid>
+      <description>&lt;p&gt;При создании сложных интерфейсов в инспекторе Unity иногда возникает
+необходиость создания чего-то вроде вкладок. Вкладки имеют одинаковую структуру,
+но разное содержание.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Внешние библиотеки в haxe</title>
       <link>https://pixel-rebels.com/posts/2022-03-01_haxe_extern/</link>
