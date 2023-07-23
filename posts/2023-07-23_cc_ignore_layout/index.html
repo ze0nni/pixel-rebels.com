@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru-ru">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="generator" content="Hugo 0.92.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="Pixel rebels">
+<title>Повторить свойство Ignore Layout в Cocos creator - Pixel rebels</title>
+</head>
+<body>
+
+<header>
+  <div class="container clearfix">
+    <a class="path" href="https://pixel-rebels.com/">[Pixel rebels]</a>
+    
+  </div>
+</header>
+
+<div class="container">
+
+
+<main role="main" class="article">
+  
+<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="meta">
+
+    <span class="val"><time itemprop="datePublished" datetime="2023-07-23">23
+
+
+
+
+
+
+
+Июля
+
+
+
+
+
+2023</time></span>
+
+
+
+  </div>
+  <h1 class="headline" itemprop="headline">Повторить свойство Ignore Layout в Cocos creator</h1>
+  <section class="body" itemprop="articleBody">
+    <p>При верстке интерфейса в юнити часто возникает необходимост собрать
+выпадающее, которое бы меняло свою высоту в зависимости контента.
+При этом у меню есть рамка, которая должна менять свой размер.</p>
+<p>
+<figure style="text-align:center">
+    <img src="1.gif" onclick='img_b5e9b4f86ce43ca65bd79c894c4a924c.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Пример меню в юнити</figcaption>
+</figure>
+
+<dialog id="img_b5e9b4f86ce43ca65bd79c894c4a924c" onclick='img_b5e9b4f86ce43ca65bd79c894c4a924c.close()'>
+    <img src="1.gif" style="width:100%;height:100%">
+</dialog></p>
+<p>Для этого следует добавить в меню объект, с компонентом <em>LayoutElement</em>,
+у которого выставлен флаг <em>Ignore Layout</em>, а у самого элемента выставить
+якоря left, top, right и bottom как это сделано на картинке.</p>
+<p>
+<figure style="text-align:center">
+    <img src="2.png" onclick='img_fb5c81ed3a220004b71069645f112867.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Верстка компонента</figcaption>
+</figure>
+
+<dialog id="img_fb5c81ed3a220004b71069645f112867" onclick='img_fb5c81ed3a220004b71069645f112867.close()'>
+    <img src="2.png" style="width:100%;height:100%">
+</dialog></p>
+<h1 id="верстка-для-cocos-creator">Верстка для Cocos Creator</h1>
+<p>В Cocos Creator отсутствует компонент <em>LayoutElement</em>, но я покажу как
+сверстать такое же меню. Верстка получится чуть сложнее, но решит задачу.</p>
+<p>
+<figure style="text-align:center">
+    <img src="3.gif" onclick='img_068ae40523a24c9ef54edefd375e542d.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Пример меню в Cocos creator</figcaption>
+</figure>
+
+<dialog id="img_068ae40523a24c9ef54edefd375e542d" onclick='img_068ae40523a24c9ef54edefd375e542d.close()'>
+    <img src="3.gif" style="width:100%;height:100%">
+</dialog></p>
+<p>Меню имеет следующую структуру:</p>
+<p>
+<figure style="text-align:center">
+    <img src="4.png" onclick='img_09dd8c2662b96ce14928333f055c5580.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Структура меню</figcaption>
+</figure>
+
+<dialog id="img_09dd8c2662b96ce14928333f055c5580" onclick='img_09dd8c2662b96ce14928333f055c5580.close()'>
+    <img src="4.png" style="width:100%;height:100%">
+</dialog></p>
+<p>Важно отметить что узел Background должен иметь размеры 0x0.
+Далее настройки важных компонентов</p>
+<p>
+<figure style="text-align:center">
+    <img src="5.png" onclick='img_8266e4bfeda1bd42d8f9794eb4ea0a13.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Menu</figcaption>
+</figure>
+
+<dialog id="img_8266e4bfeda1bd42d8f9794eb4ea0a13" onclick='img_8266e4bfeda1bd42d8f9794eb4ea0a13.close()'>
+    <img src="5.png" style="width:100%;height:100%">
+</dialog></p>
+<p>
+<figure style="text-align:center">
+    <img src="6.png" onclick='img_f19c9085129709ee14d013be869df69b.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Background</figcaption>
+</figure>
+
+<dialog id="img_f19c9085129709ee14d013be869df69b" onclick='img_f19c9085129709ee14d013be869df69b.close()'>
+    <img src="6.png" style="width:100%;height:100%">
+</dialog></p>
+<p>
+<figure style="text-align:center">
+    <img src="7.png" onclick='img_9eb9cd58b9ea5e04c890326b5c1f471f.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Sprite</figcaption>
+</figure>
+
+<dialog id="img_9eb9cd58b9ea5e04c890326b5c1f471f" onclick='img_9eb9cd58b9ea5e04c890326b5c1f471f.close()'>
+    <img src="7.png" style="width:100%;height:100%">
+</dialog></p>
+<p>Самое важное в узле Sprite то, что в поле <em>Target</em> указана ссылка на <em>Menu</em>.</p>
+<p>
+<figure style="text-align:center">
+    <img src="8.png" onclick='img_602e8f042f463dc47ebfdf6a94ed5a6d.showModal()'
+        style="max-height:320px; object-fit: scale-down; -ms-interpolation-mode: bicubic;"
+    >
+    <figcaption style="text-align:center">Items</figcaption>
+</figure>
+
+<dialog id="img_602e8f042f463dc47ebfdf6a94ed5a6d" onclick='img_602e8f042f463dc47ebfdf6a94ed5a6d.close()'>
+    <img src="8.png" style="width:100%;height:100%">
+</dialog></p>
+  </section>
+</article>
+
+</main>
+
+</div>
+
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2023 Pixel rebels - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
+
